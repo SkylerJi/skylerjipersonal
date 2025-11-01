@@ -77,6 +77,7 @@ export default function Body({ currentView, setCurrentView }: BodyProps) {
   const contentRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [lineNumbers, setLineNumbers] = useState<number[]>([]);
   const showHistory = currentView === 'history';
+  const [showBlame, setShowBlame] = useState(false);
   const [discussionFilter, setDiscussionFilter] = useState<'all' | 'general' | 'ideas' | 'q&a'>('all');
   const [showNewDiscussionModal, setShowNewDiscussionModal] = useState(false);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
@@ -127,6 +128,23 @@ export default function Body({ currentView, setCurrentView }: BodyProps) {
       dateDisplay: 'May 1'
     }
   ];
+
+  // Mock blame data - assign commit info to each line
+  const blameData = lines.map((line, index) => {
+    // Distribute commits across lines for realistic blame view
+    let commit;
+    if (index < 3) {
+      commit = commits[0]; // Most recent commit for first few lines
+    } else if (index < 8) {
+      commit = commits[1]; // Middle commit for middle lines
+    } else {
+      commit = commits[2]; // Oldest commit for later lines
+    }
+    return {
+      commit,
+      lineNumber: index + 1
+    };
+  });
 
   // Group commits by date
   const groupedCommits = commits.reduce((acc, commit) => {
@@ -1228,7 +1246,14 @@ export default function Body({ currentView, setCurrentView }: BodyProps) {
                         </div>
                         <span>→</span>
                         <div className="flex items-center gap-2">
-                          <span className="text-[#e6edf3]">skylerji</span>
+                          <a 
+                            href="https://github.com/SkylerJi" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="text-[#e6edf3] hover:text-[#58a6ff]"
+                          >
+                            skylerji
+                          </a>
                           <span className="text-[#7d8590]">:</span>
                           <span className="text-[#58a6ff]">main</span>
                         </div>
@@ -1508,7 +1533,7 @@ export default function Body({ currentView, setCurrentView }: BodyProps) {
             <div ref={deleteErrorModalRef} className="bg-[#161b22] border border-[#da3633] rounded-lg max-w-md w-full">
               <div className="p-6">
                 <div className="flex items-center gap-3 mb-4">
-                  <XCircle className="w-6 h-6 text-[#da3633] flex-shrink-0" strokeWidth={1.5} />
+                  <XCircle className="w-6 h-6 text-[#da3633] shrink-0" strokeWidth={1.5} />
                   <h2 className="text-xl font-semibold text-[#e6edf3]">Error</h2>
                 </div>
                 <p className="text-[#c9d1d9] mb-6">
@@ -1821,44 +1846,48 @@ export default function Body({ currentView, setCurrentView }: BodyProps) {
           <h1 className="text-2xl font-semibold text-[#e6edf3] mb-4">Commits</h1>
 
           {/* History path */}
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2 text-sm text-[#7d8590]">
-              <span>History for</span>
-              <button 
-                onClick={() => setCurrentView('code')}
-                className="text-[#58a6ff] hover:underline cursor-pointer active:opacity-70 transition-opacity"
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0 mb-4">
+            <div className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm text-[#7d8590] flex-wrap overflow-x-auto">
+              <span className="whitespace-nowrap">History for</span>
+              <a 
+                href="https://github.com/SkylerJi" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-[#58a6ff] hover:underline cursor-pointer active:opacity-70 transition-opacity whitespace-nowrap shrink-0"
               >
                 skylerji
-              </button>
+              </a>
               <span>/</span>
               <button 
                 onClick={() => setCurrentView('code')}
-                className="text-[#58a6ff] hover:underline cursor-pointer active:opacity-70 transition-opacity"
+                className="text-[#58a6ff] hover:underline cursor-pointer active:opacity-70 transition-opacity whitespace-nowrap shrink-0"
               >
                 README
               </button>
               <span>/</span>
               <button 
                 onClick={() => setCurrentView('code')}
-                className="text-[#58a6ff] hover:underline cursor-pointer active:opacity-70 transition-opacity"
+                className="text-[#58a6ff] hover:underline cursor-pointer active:opacity-70 transition-opacity whitespace-nowrap shrink-0"
               >
                 README.md
               </button>
-              <span>on</span>
-              <span className="px-2 py-0.5 bg-[#21262d] border border-[#30363d] rounded-full text-xs text-[#58a6ff]">
+              <span className="whitespace-nowrap">on</span>
+              <span className="px-2 py-0.5 bg-[#21262d] border border-[#30363d] rounded-full text-xs text-[#58a6ff] whitespace-nowrap shrink-0">
                 main
               </span>
             </div>
 
             {/* Filters */}
-            <div className="flex items-center gap-2">
-              <button className="flex items-center gap-2 px-3 py-1.5 text-sm text-[#7d8590] hover:text-[#e6edf3] hover:bg-[#161b22] active:bg-[#21262d] rounded-md border border-[#30363d] cursor-pointer transition-colors">
-                <User className="w-4 h-4" strokeWidth={1.5} />
-                All users
+            <div className="flex items-center gap-2 flex-wrap">
+              <button className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 text-xs sm:text-sm text-[#7d8590] hover:text-[#e6edf3] hover:bg-[#161b22] active:bg-[#21262d] rounded-md border border-[#30363d] cursor-pointer transition-colors">
+                <User className="w-3 h-3 sm:w-4 sm:h-4" strokeWidth={1.5} />
+                <span className="hidden sm:inline">All users</span>
+                <span className="sm:hidden">Users</span>
               </button>
-              <button className="flex items-center gap-2 px-3 py-1.5 text-sm text-[#7d8590] hover:text-[#e6edf3] hover:bg-[#161b22] active:bg-[#21262d] rounded-md border border-[#30363d] cursor-pointer transition-colors">
-                <Calendar className="w-4 h-4" strokeWidth={1.5} />
-                All time
+              <button className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 text-xs sm:text-sm text-[#7d8590] hover:text-[#e6edf3] hover:bg-[#161b22] active:bg-[#21262d] rounded-md border border-[#30363d] cursor-pointer transition-colors">
+                <Calendar className="w-3 h-3 sm:w-4 sm:h-4" strokeWidth={1.5} />
+                <span className="hidden sm:inline">All time</span>
+                <span className="sm:hidden">Time</span>
               </button>
             </div>
           </div>
@@ -1874,28 +1903,33 @@ export default function Body({ currentView, setCurrentView }: BodyProps) {
                   {dateCommits.map((commit) => (
                     <div 
                       key={commit.hash}
-                      className="flex items-center justify-between py-3 px-4 border border-[#30363d] rounded-md hover:bg-[#161b22] transition-colors"
+                      className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0 py-3 px-3 sm:px-4 border border-[#30363d] rounded-md hover:bg-[#161b22] transition-colors"
                     >
-                      <div className="flex-1 min-w-0">
+                      <div className="flex-1 min-w-0 w-full sm:w-auto">
                         <div className="flex items-center gap-2 mb-1">
-                          <span className="text-sm text-[#e6edf3] font-medium">
+                          <span className="text-xs sm:text-sm text-[#e6edf3] font-medium break-words">
                             {commit.message}
                           </span>
                         </div>
-                        <div className="flex items-center gap-2 text-xs text-[#7d8590]">
+                        <div className="flex items-center gap-2 text-xs text-[#7d8590] flex-wrap">
                           <img 
                             src={commit.authorAvatar} 
                             alt={commit.author}
-                            className="w-4 h-4 rounded-full"
+                            className="w-4 h-4 rounded-full shrink-0"
                           />
-                          <span className="text-[#e6edf3] hover:text-[#58a6ff] active:text-[#4493f8] cursor-pointer transition-colors">
+                          <a 
+                            href="https://github.com/SkylerJi"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-[#e6edf3] hover:text-[#58a6ff] active:text-[#4493f8] cursor-pointer transition-colors whitespace-nowrap"
+                          >
                             {commit.author}
-                          </span>
-                          <span>committed on {commit.dateDisplay}</span>
+                          </a>
+                          <span className="whitespace-nowrap">committed on {commit.dateDisplay}</span>
                         </div>
                       </div>
-                      <div className="flex items-center gap-2 ml-4">
-                        <span className="text-xs font-mono text-[#7d8590]">
+                      <div className="flex items-center gap-1 sm:gap-2 ml-0 sm:ml-4 shrink-0">
+                        <span className="text-xs font-mono text-[#7d8590] hidden sm:inline">
                           {commit.hash}
                         </span>
                         <button
@@ -1903,20 +1937,20 @@ export default function Body({ currentView, setCurrentView }: BodyProps) {
                           className="p-1.5 text-[#7d8590] hover:text-[#e6edf3] hover:bg-[#21262d] active:bg-[#30363d] active:scale-95 rounded cursor-pointer transition-all"
                           title="Copy full SHA"
                         >
-                          <Copy className="w-4 h-4" strokeWidth={1.5} />
+                          <Copy className="w-3 h-3 sm:w-4 sm:h-4" strokeWidth={1.5} />
                         </button>
                         <button
                           className="p-1.5 text-[#7d8590] hover:text-[#e6edf3] hover:bg-[#21262d] active:bg-[#30363d] active:scale-95 rounded cursor-pointer transition-all"
                           title="View parent"
                         >
-                          <GitBranch className="w-4 h-4" strokeWidth={1.5} />
+                          <GitBranch className="w-3 h-3 sm:w-4 sm:h-4" strokeWidth={1.5} />
                         </button>
                         <button
                           onClick={() => setCurrentView('code')}
                           className="p-1.5 text-[#7d8590] hover:text-[#e6edf3] hover:bg-[#21262d] active:bg-[#30363d] active:scale-95 rounded cursor-pointer transition-all"
                           title="Browse files at this commit"
                         >
-                          <FileText className="w-4 h-4" strokeWidth={1.5} />
+                          <FileText className="w-3 h-3 sm:w-4 sm:h-4" strokeWidth={1.5} />
                         </button>
                       </div>
                     </div>
@@ -1939,26 +1973,40 @@ export default function Body({ currentView, setCurrentView }: BodyProps) {
     <div className="flex-1 overflow-y-auto">
       <div className="max-w-[1280px] mx-auto px-4 md:px-8 py-6">
         {/* File path breadcrumb */}
-        <div className="flex items-center gap-2 mb-4 text-sm">
-          <button className="text-[#58a6ff] hover:underline cursor-pointer active:opacity-70 transition-opacity">skylerji</button>
-          <span className="text-[#7d8590]">/</span>
-          <button className="text-[#58a6ff] hover:underline font-semibold cursor-pointer active:opacity-70 transition-opacity">README</button>
-          <span className="text-[#7d8590]">/</span>
-          <span className="text-[#e6edf3]">README.md</span>
+        <div className="flex items-center gap-1 sm:gap-2 mb-4 text-xs sm:text-sm overflow-x-auto">
+          <a 
+            href="https://github.com/SkylerJi" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-[#58a6ff] hover:underline cursor-pointer active:opacity-70 transition-opacity whitespace-nowrap shrink-0"
+          >
+            skylerji
+          </a>
+          <span className="text-[#7d8590] shrink-0">/</span>
+          <button className="text-[#58a6ff] hover:underline font-semibold cursor-pointer active:opacity-70 transition-opacity whitespace-nowrap shrink-0">README</button>
+          <span className="text-[#7d8590] shrink-0">/</span>
+          <span className="text-[#e6edf3] whitespace-nowrap shrink-0">README.md</span>
         </div>
 
         {/* Commit info bar */}
-        <div className="flex items-center justify-between mb-4 text-sm border p-2 rounded-lg border-[#30363d]">
-          <div className="flex items-center gap-2">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0 mb-4 text-sm border p-2 sm:p-2 rounded-lg border-[#30363d]">
+          <div className="flex items-center gap-2 flex-wrap">
             <img 
               src="/githubavatar.png" 
               alt="Avatar" 
-              className="w-6 h-6 rounded-full object-cover"
+              className="w-6 h-6 rounded-full object-cover shrink-0"
             />
-            <a href="#" className="text-[#e6edf3] hover:text-[#58a6ff] font-semibold">skylerji</a>
-            <a href="#" className="text-gray-500 hover:text-[#58a6ff]">added random aura farm stats</a>
+            <a 
+              href="https://github.com/SkylerJi" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-[#e6edf3] hover:text-[#58a6ff] font-semibold break-all sm:break-normal"
+            >
+              skylerji
+            </a>
+            <a href="#" className="text-gray-500 hover:text-[#58a6ff] break-all sm:break-normal">added random aura farm stats</a>
           </div>
-          <div className="flex items-center gap-4 text-[#7d8590]">
+          <div className="flex items-center gap-2 sm:gap-4 text-[#7d8590] flex-wrap">
             <a href="#" className="hover:text-[#58a6ff] flex items-center gap-1">
               <span className="font-mono text-xs">420af67</span>
             </a>
@@ -1976,12 +2024,26 @@ export default function Body({ currentView, setCurrentView }: BodyProps) {
         {/* GitHub-style file viewer */}
         <div className="border border-[#30363d] rounded-lg overflow-hidden">
           {/* Header */}
-          <div className="bg-[#161b22] border-b border-[#30363d] px-4 py-2 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <button className="px-3 py-1 text-sm font-medium bg-[#21262d] text-[#c9d1d9] rounded-md border border-[#30363d] hover:bg-[#30363d] active:bg-[#1c2128] active:scale-95 cursor-pointer transition-all">
+          <div className="bg-[#161b22] border-b border-[#30363d] px-2 sm:px-4 py-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <button 
+                onClick={() => setShowBlame(false)}
+                className={`px-2 sm:px-3 py-1 text-xs sm:text-sm font-medium rounded-md border border-[#30363d] hover:bg-[#30363d] active:bg-[#1c2128] active:scale-95 cursor-pointer transition-all ${
+                  !showBlame 
+                    ? 'bg-[#21262d] text-[#c9d1d9]' 
+                    : 'text-[#7d8590] hover:text-[#c9d1d9] active:text-[#e6edf3]'
+                }`}
+              >
                 Code
               </button>
-              <button className="px-3 py-1 text-sm text-[#7d8590] hover:text-[#c9d1d9] active:text-[#e6edf3] active:scale-95 cursor-pointer transition-all">
+              <button 
+                onClick={() => setShowBlame(true)}
+                className={`px-2 sm:px-3 py-1 text-xs sm:text-sm rounded-md border border-[#30363d] hover:bg-[#30363d] active:bg-[#1c2128] active:scale-95 cursor-pointer transition-all ${
+                  showBlame 
+                    ? 'bg-[#21262d] text-[#c9d1d9] font-medium' 
+                    : 'text-[#7d8590] hover:text-[#c9d1d9] active:text-[#e6edf3]'
+                }`}
+              >
                 Blame
               </button>
             </div>
@@ -1990,39 +2052,105 @@ export default function Body({ currentView, setCurrentView }: BodyProps) {
             </div>
           </div>
 
-          {/* File content */}
-          <div className="bg-[#0d1117]">
-            <div className="flex">
-              {/* Line numbers - dynamically calculated */}
-              <div className="bg-[#0d1117] text-[#6e7681] text-right py-3 px-3 select-none border-r border-[#30363d] text-xs font-mono leading-6 shrink-0">
-                {lineNumbers.map((num, index) => (
-                  <div key={index} className="h-6">
-                    {num > 0 ? num : ''}
-                  </div>
-                ))}
-              </div>
+          {/* File content - Code view */}
+          {!showBlame && (
+            <div className="bg-[#0d1117]">
+              <div className="flex overflow-x-auto">
+                {/* Line numbers - dynamically calculated */}
+                <div className="bg-[#0d1117] text-[#6e7681] text-right py-3 px-2 sm:px-3 select-none border-r border-[#30363d] text-xs font-mono leading-6 shrink-0">
+                  {lineNumbers.map((num, index) => (
+                    <div key={index} className="h-6">
+                      {num > 0 ? num : ''}
+                    </div>
+                  ))}
+                </div>
 
-              {/* Content - wraps naturally */}
-              <div className="flex-1 py-3 px-4 text-sm leading-6 font-[system-ui] overflow-x-auto">
-                {lines.map((line, index) => (
-                  <div 
-                    key={index} 
-                    ref={el => { contentRefs.current[index] = el; }}
-                    className="leading-6 wrap-break-word"
-                  >
-                    {renderLineContent(line.content)}
-                  </div>
-                ))}
+                {/* Content - wraps naturally */}
+                <div className="flex-1 py-3 px-2 sm:px-4 text-sm leading-6 font-[system-ui] overflow-x-auto min-w-0">
+                  {lines.map((line, index) => (
+                    <div 
+                      key={index} 
+                      ref={el => { contentRefs.current[index] = el; }}
+                      className="leading-6 break-words"
+                    >
+                      {renderLineContent(line.content)}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
+          )}
+
+          {/* Blame view */}
+          {showBlame && (
+            <div className="bg-[#0d1117]">
+              <div className="flex overflow-x-auto">
+                {/* Blame info column */}
+                <div className="bg-[#161b22] text-[#6e7681] py-3 px-2 sm:px-4 select-none border-r border-[#30363d] text-xs font-mono leading-6 shrink-0 min-w-[100px] sm:min-w-[180px]">
+                  {blameData.map((blame, index) => {
+                    const prevBlame = index > 0 ? blameData[index - 1] : null;
+                    const isSameCommit = prevBlame && prevBlame.commit.hash === blame.commit.hash;
+                    
+                    return (
+                      <div 
+                        key={index} 
+                        className={`h-6 flex flex-col justify-center ${isSameCommit ? '' : 'border-t border-[#30363d]'} ${index === 0 ? 'border-t-0' : ''}`}
+                      >
+                        {!isSameCommit && (
+                          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-0.5 sm:gap-1.5">
+                            <a 
+                              href="https://github.com/SkylerJi"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-[#58a6ff] hover:underline truncate max-w-full text-[10px] sm:text-xs"
+                              title={blame.commit.author}
+                            >
+                              {blame.commit.author}
+                            </a>
+                            <span className="text-[#6e7681] truncate text-[10px] sm:text-xs">{blame.commit.dateDisplay}</span>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Line numbers */}
+                <div className="bg-[#0d1117] text-[#6e7681] text-right py-3 px-2 sm:px-3 select-none border-r border-[#30363d] text-xs font-mono leading-6 shrink-0">
+                  {lineNumbers.map((num, index) => (
+                    <div key={index} className="h-6">
+                      {num > 0 ? num : ''}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Content - wraps naturally */}
+                <div className="flex-1 py-3 px-2 sm:px-4 text-sm leading-6 font-[system-ui] overflow-x-auto min-w-0">
+                  {lines.map((line, index) => {
+                    const prevBlame = index > 0 ? blameData[index - 1] : null;
+                    const blame = blameData[index];
+                    const isSameCommit = prevBlame && prevBlame.commit.hash === blame.commit.hash;
+                    
+                    return (
+                      <div 
+                        key={index}
+                        className={`leading-6 break-words ${isSameCommit ? '' : 'border-t border-[#30363d]'} ${index === 0 ? 'border-t-0' : ''}`}
+                      >
+                        {renderLineContent(line.content)}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Footer info (optional GitHub-style metadata) */}
-        <div className="mt-4 text-xs text-[#7d8590] flex items-center gap-4">
-          <span>README.md</span>
-          <span>•</span>
-          <span>Last updated just now</span>
+        <div className="mt-4 text-xs text-[#7d8590] flex items-center gap-2 sm:gap-4 flex-wrap">
+          <span className="whitespace-nowrap">README.md</span>
+          <span className="hidden sm:inline">•</span>
+          <span className="whitespace-nowrap">Last updated just now</span>
         </div>
       </div>
     </div>

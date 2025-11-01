@@ -63,7 +63,7 @@ export default function Header({ currentView, setCurrentView }: HeaderProps) {
               className="bg-[#0d1117] border border-[#30363d] rounded-md px-2 sm:px-3 py-1.5 text-sm w-32 sm:w-48 md:w-64 text-[#e6edf3] placeholder-[#7d8590] focus:outline-none focus:border-[#1f6feb]"
             />
             {showSearchPopup && (
-              <div className="absolute top-full left-0 mt-2 w-[calc(100vw-2rem)] sm:w-80 bg-[#161b22] border border-[#30363d] rounded-md shadow-lg z-50 p-4">
+              <div className="absolute top-full right-0 sm:left-0 mt-2 sm:mr-0 w-[calc(100vw-5rem)] sm:w-80 max-w-[calc(100vw-1rem)] sm:max-w-none bg-[#161b22] border border-[#30363d] rounded-md shadow-lg z-50 p-4">
                 <p className="text-[#e6edf3] text-sm">
                   the words on this page are too big for you, don't bother trying to spell them
                 </p>
