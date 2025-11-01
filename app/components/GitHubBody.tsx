@@ -1775,7 +1775,7 @@ export default function Body({ currentView, setCurrentView }: BodyProps) {
                 <div>
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-[#c9d1d9] text-sm">Handsome</span>
-                    <span className="text-[#f78166] font-bold">Just ask my mom</span>
+                    <span className="text-[#f78166] font-bold">Just ask my grandma</span>
                   </div>
                   <div className="w-full bg-[#0d1117] rounded-full h-2">
                     <div className="bg-[#f78166] h-2 rounded-full" style={{ width: '100%' }}></div>
