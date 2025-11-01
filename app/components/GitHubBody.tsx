@@ -14,6 +14,30 @@ export default function Body({ currentView, setCurrentView }: BodyProps) {
   // Each line can wrap naturally based on container width
   const lines = [
     {
+      content: ["My current favorite things are",
+        
+        { type: 'link', text: ' anime ', href: 'https://myanimelist.net/profile/skyguy69' },
+        "and basketball. I will also cook you in tennis, table tennis, and pickleball."],
+    },
+    {
+      content: ""
+    },
+
+    {
+
+      content: [
+
+        "I used to play a lot of video games; I was top 50 in the world in",
+        { type: 'link', text: ' bonk.io ', href: 'https://bonkio.fandom.com/wiki/Level_Leaderboard' },
+        "and held the 2nd highest DPS in the world in Elder Scrolls Online ever (at the time, I think the meta has shifted now). I also played a ice hockey since I was 5 and played D2 at Berkeley, but I don't play anymore (not good for the ol' cranium)."
+        ,
+      ]
+      
+    },
+    {
+      content: ""
+    },
+    {
       content: "I came into Berkeley an anthropology major. After teaching myself accounting, I changed to a business major and headed finances and operations at a Series A aerospace manufacturing startup."
     },
     {
@@ -21,7 +45,7 @@ export default function Body({ currentView, setCurrentView }: BodyProps) {
     },
     {
       content: [
-        "Realizing accounting was the most boring thing ever, I dropped out and taught myself how to code so I could build an AI accountant called ",
+        "Realizing accounting was the most boring thing ever, I dropped out, taught myself how to code, and built an AI accountant called ",
         { type: 'link', text: 'Dough', href: 'https://makedough.ai' },
         ". Through that journey, I met my cofounders, and we scaled the company until eventually ",
         { type: 'link', text: 'selling it.', href: 'https://www.employer.com/' }
@@ -37,6 +61,17 @@ export default function Body({ currentView, setCurrentView }: BodyProps) {
         " <> an AI that watches people use software, helping companies build better products. We ended up raising $5m from General Catalyst, Vercel, and Paul Graham."
       ]
     },
+
+    {
+      content: ""
+    },
+    {
+      content: ["Long list of everything else I like talking about: pokemon (cards and go), clash royale, brawl stars, elder scrolls series, dark souls series (completed all the achievements),",
+        { type: 'link', text: ' physics/philosophy/stoner thoughts', href: 'https://www.universalism.co/' },
+        ", ecommerce, chess, poker, and myself (very narcissistic typa dude)."
+      ],
+     
+    }
   ];
 
   const contentRefs = useRef<(HTMLDivElement | null)[]>([]);
