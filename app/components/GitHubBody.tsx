@@ -29,7 +29,7 @@ export default function Body({ currentView, setCurrentView }: BodyProps) {
 
         "I used to play a lot of video games; I was top 50 in the world in",
         { type: 'link', text: ' bonk.io ', href: 'https://bonkio.fandom.com/wiki/Level_Leaderboard' },
-        "and held the 2nd highest DPS in the world in Elder Scrolls Online ever (at the time, I think the meta has shifted now). I also played a ice hockey since I was 5 and played D2 at Berkeley, but I don't play anymore (not good for the ol' cranium)."
+        "and held the 2nd highest DPS in the world in Elder Scrolls Online ever (at the time, I think the meta has shifted now). I also played ice hockey since I was 5 and played D2 at Berkeley. I don't play anymore (not good for the ol' cranium)."
         ,
       ]
       
