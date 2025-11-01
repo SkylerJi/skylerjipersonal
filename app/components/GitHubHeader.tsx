@@ -33,8 +33,8 @@ export default function Header({ currentView, setCurrentView }: HeaderProps) {
   }, []);
 
   return (
-    <header className="bg-[#010409] border-b border-[#30363d] shrink-0">
-      <div className="px-2 sm:px-4 py-2 sm:py-3 flex items-center justify-between gap-2">
+    <header className="bg-[#010409] border-b border-[#30363d] flex-none relative z-10 w-full">
+      <div className="px-2 sm:px-4 py-2 sm:py-3 flex items-center justify-between gap-2 min-h-[48px]">
         <div className="flex items-center gap-2 sm:gap-4 min-w-0 flex-1">
           {/* Menu and Logo */}
           <button className="text-[#7d8590] hover:text-[#c9d1d9] shrink-0">
@@ -133,8 +133,8 @@ export default function Header({ currentView, setCurrentView }: HeaderProps) {
       </div>
 
       {/* Navigation tabs - horizontally scrollable on mobile */}
-      <nav className="px-2 sm:px-4 border-t border-[#21262d] overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-        <div className="flex items-center gap-2 sm:gap-4 min-w-max">
+      <nav className="px-2 sm:px-4 border-t border-[#21262d] overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] min-h-[48px]">
+        <div className="flex items-center gap-2 sm:gap-4 min-w-max h-full">
           <button 
             onClick={() => setCurrentView('code')}
             className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm font-medium cursor-pointer whitespace-nowrap shrink-0 ${
