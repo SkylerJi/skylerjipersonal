@@ -66,7 +66,7 @@ export default function Body({ currentView, setCurrentView }: BodyProps) {
       content: ""
     },
     {
-      content: ["Long list of everything else I like talking about: pokemon (cards and go), clash royale, brawl stars, elder scrolls series, dark souls series (completed all the achievements),",
+      content: ["Anyways, here's a long list of everything else I like talking about (just in case you were wondering): Pokemon cards and Pokemon Go, Clash Royale, Brawl Stars, Elder Scrolls series, Dark Souls series (completed all the achievements),",
         { type: 'link', text: ' physics/philosophy/stoner thoughts', href: 'https://www.universalism.co/' },
         ", ecommerce, chess, poker, and myself (very narcissistic typa dude)."
       ],
