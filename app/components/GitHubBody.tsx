@@ -14,14 +14,14 @@ export default function Body({ currentView, setCurrentView }: BodyProps) {
   // Each line can wrap naturally based on container width
   const lines = [
     {
-      content: "I came into Berkeley an anthropology major. After teaching myself accounting, I moved to a business major and headed finances and operations at a Series A Aerospace Manufacturing startup."
+      content: "I came into Berkeley an anthropology major. After teaching myself accounting, I changed to a business major and headed finances and operations at a Series A aerospace manufacturing startup."
     },
     {
       content: ""
     },
     {
       content: [
-        "Realizing accounting was the most boring thing ever, I dropped out and decided to teach myself how to code so I could build an AI accountant called ",
+        "Realizing accounting was the most boring thing ever, I dropped out and taught myself how to code so I could build an AI accountant called ",
         { type: 'link', text: 'Dough', href: 'https://makedough.ai' },
         ". Through that journey, I met my cofounders, and we scaled the company until eventually ",
         { type: 'link', text: 'selling it.', href: 'https://www.employer.com/' }
